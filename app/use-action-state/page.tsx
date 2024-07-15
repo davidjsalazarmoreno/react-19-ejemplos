@@ -41,7 +41,4 @@ export default function ActionState() {
       {isPending && <p>Loading</p>}
     </form>
   );
-
-
-
 }
