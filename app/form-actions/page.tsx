@@ -18,21 +18,27 @@ export default function ActionState() {
 
   const [error, submitAction, isPending] = useActionState(
     async (previousState, formData) => {
-      const error = await updateName(formData.get("name"));
-      if (error) {
-        return error;
+      try {
+        const error = await updateName(formData.get("name"));
+        if (error) {
+          return error;
+        } else {
+          redirect("/");
+        }
+
+      } catch (e) {
+        return "Error updating name";
       }
-      redirect("/");
-      return null;
     },
     null,
   );
 
   return (
     <form action={submitAction}>
-      <input type="text" name="name" />
+      <input type="text" name="name" placeholder="Type your name" />
       <button type="submit" disabled={isPending}>Update</button>
       {error && <p>{error}</p>}
+      {isPending && <p>Loading</p>}
     </form>
   );
 
