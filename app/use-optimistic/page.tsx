@@ -16,12 +16,12 @@ function ChangeName({ currentName, onUpdateName }: ChangeNameProps) {
   const submitAction = async (formData) => {
     const newName = formData.get("name");
     setOptimisticName(newName);
-    const error = await updateName(newName);
-
-    if (error.length > 0) {
+    try {
+      const error = await updateName(newName);
+      // throw new Error("Error updating name");
+      onUpdateName(error.length > 0 ? currentName : newName);
+    } catch (e) {
       onUpdateName(currentName);
-    } else {
-      onUpdateName(newName);
     }
   };
 
