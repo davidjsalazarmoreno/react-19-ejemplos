@@ -4,6 +4,8 @@ import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+type ActionState = string;
+
 export default function ActionState() {
   const router = useRouter();
 
@@ -17,22 +19,26 @@ export default function ActionState() {
     });
   };
 
-  const [error, submitAction, pending] = useActionState(
-    async (previousState, formData) => {
+  const [error, submitAction, pending] = useActionState<string | null, FormData>(
+    async (previousState, formData: FormData) => {
       try {
-        const error = await updateName(formData.get("name"));
+        
+        console.log("previousState")
+        console.log(previousState)
+        const name = formData.get("name") as string;
+        const error = await updateName(name);
 
         if (error.length > 0) {
           return error;
         } else {
           router.push("/");
-          return false;
+          return null;
         }
       } catch (e) {
         return "Error updating name";
       }
     },
-    null
+    ""
   );
 
   return (
