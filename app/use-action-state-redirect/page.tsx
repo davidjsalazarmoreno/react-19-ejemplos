@@ -17,26 +17,20 @@ export default function ActionState() {
     });
   };
 
-  const [error, submitAction, pending] = useActionState<string | null, FormData>(
-    async (previousState, formData: FormData) => {
-      try {
-        
-        console.log("previousState")
-        console.log(previousState)
-        const name = formData.get("name") as string;
-        const error = await updateName(name);
+  const [error, submitAction, pending] = useActionState<
+    string | null,
+    FormData
+  >(async (_, formData: FormData) => {
+    try {
+      const name = formData.get("name") as string;
+      await updateName(name);
 
-        if (error.length > 0) {
-          return error;
-        } else {
-          return null;
-        }
-      } catch (e) {
-        return "Error";
-      }
-    },
-    "No hay nombre"
-  );
+      router.push("/");
+      return null;
+    } catch (e) {
+      return "Error";
+    }
+  }, "No hay nombre");
 
   return (
     <form
