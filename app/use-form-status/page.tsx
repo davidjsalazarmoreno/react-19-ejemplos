@@ -2,29 +2,39 @@
 import LoadingState from "@/components/loading-state/loading-state";
 import Submit from "@/components/submit/submit";
 import Username from "@/components/username/username";
-import { updateName } from "@/lib/services";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
 
 export default function ActionState() {
   const router = useRouter();
 
-  const [error, submitAction, pending] = useActionState(
-    async (previousState, formData) => {
+  const updateName = (name: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(name);
+      }, 1000);
+    });
+  };
+
+  const [error, submitAction, pending] = useActionState<string | null, FormData>(
+    async (previousState, formData: FormData) => {
       try {
-        const error = await updateName(formData.get("name"));
-        console.log(error);
+        
+        console.log("previousState")
+        console.log(previousState)
+        const name = formData.get("name") as string;
+        const error = await updateName(name);
+
         if (error.length > 0) {
           return error;
         } else {
-          router.push("/");
-          return false;
+          return null;
         }
       } catch (e) {
-        return "Error updating name";
+        return "Error";
       }
     },
-    null
+    "No hay nombre"
   );
 
   return (

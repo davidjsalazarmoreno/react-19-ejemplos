@@ -13,12 +13,11 @@ export type ChangeNameProps = {
 function ChangeName({ currentName, onUpdateName }: ChangeNameProps) {
   const [optimisticName, setOptimisticName] = useOptimistic(currentName);
 
-  const submitAction = async (formData) => {
-    const newName = formData.get("name");
+  const submitAction = async (formData: FormData) => {
+    const newName = formData.get("name") as string;
     setOptimisticName(newName);
     try {
       const error = await updateName(newName);
-      // throw new Error("Error updating name");
       onUpdateName(error.length > 0 ? currentName : newName);
     } catch (e) {
       onUpdateName(currentName);
