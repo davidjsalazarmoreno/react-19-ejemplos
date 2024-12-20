@@ -1,3 +1,4 @@
+"use client"
 import { getComments } from "@/lib/services";
 import { use } from "react";
 
